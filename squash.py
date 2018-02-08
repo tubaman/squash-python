@@ -41,15 +41,15 @@ class Squash(object):
         libraries = json.loads(txt)
         return libraries
 
-    def get_drive(self, index):
-        r = self.get("/requirement-browser/drives/%s/content" % index)
+    def get_drive(self, id):
+        r = self.get("/requirement-browser/drives/%s/content" % id)
         return r.json()
 
-    def get_folder(self, index):
-        r = self.get("/requirement-browser/folders/%s/content" % index)
+    def get_folder(self, id):
+        r = self.get("/requirement-browser/folders/%s/content" % id)
         return r.json()
 
-    def create_requirement(self, drive_index, name, reference="",
+    def create_requirement(self, drive_id, name, reference="",
                            description="", criticality="MINOR",
                            category="CAT_UNDEFINED"):
         data = {
@@ -60,7 +60,7 @@ class Squash(object):
             'category': category,
             'customFields': {},
         }
-        r = self.post("/requirement-browser/drives/%s/content/new-requirement" % drive_index, json=data)
+        r = self.post("/requirement-browser/drives/%s/content/new-requirement" % drive_id, json=data)
         return r.json()
 
 
