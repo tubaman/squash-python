@@ -24,7 +24,7 @@ class Squash(object):
         if r.headers['Content-Type'].startswith('text/html'):
             soup = BeautifulSoup(r.text, 'html.parser')
             if soup.head.title.text == 'Authentication':
-                raise ValueError("Not logged in")
+                raise Exception("Not logged in")
         return r
 
     def get(self, path, *args, **kwargs):
