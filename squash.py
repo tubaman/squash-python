@@ -30,20 +30,23 @@ class Squash(object):
     def post(self, path, *args, **kwargs):
         return self.request('post', path, *args, **kwargs)
 
-    def get_libraries(self):
-        r = self.get("/requirement-workspace/")
+    def get_libraries(self, workspace='requirement'):
+        url = "/%s-workspace/" % workspace
+        r = self.get(url)
         soup = BeautifulSoup(r.text, 'html.parser')
         txt = re.search(r"model\s*:\s*(.*?),\s*workspace\s*:", unicode(soup.script), re.MULTILINE|re.DOTALL).group(1)
         txt = txt.replace("'", '"')
         libraries = json.loads(txt)
         return libraries
 
-    def get_drive(self, id):
-        r = self.get("/requirement-browser/drives/%s/content" % id)
+    def get_drive(self, id, workspace='requirement'):
+        url = "/%s-browser/drives/%s/content" % (workspace, id)
+        r = self.get(url)
         return r.json()
 
-    def get_folder(self, id):
-        r = self.get("/requirement-browser/folders/%s/content" % id)
+    def get_folder(self, id, workspace='requirement'):
+        url = "/%s-browser/folders/%s/content" % (workspace, id)
+        r = self.get(url)
         return r.json()
 
     def create_requirement(self, drive_id, name, reference="",

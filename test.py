@@ -7,21 +7,22 @@ from squash import Squash
 
 cj = MozillaCookieJar(sys.argv[1])
 base_url = sys.argv[2]
+workspace = sys.argv[3]
 
 cj.load(ignore_discard=True, ignore_expires=True)
 squash = Squash(base_url, cj)
-libraries = squash.get_libraries()
+libraries = squash.get_libraries(workspace=workspace)
 for library in libraries:
     print("library: %s" % library['title'])
     if library['attr']['rel'] == 'drive':
-        drive = squash.get_drive(library['attr']['resId'])
+        drive = squash.get_drive(library['attr']['resId'], workspace=workspace)
         for child in drive:
-            print("child: %s" % child['title'])
             if child['attr']['rel'] == 'folder':
-                folder = squash.get_folder(child['attr']['resId'])
-                for requirement in folder:
-                    print("requirement: %s" % requirement['title'])
+                print("%s: %s" % (child['attr']['rel'], child['title']))
+                folder = squash.get_folder(child['attr']['resId'], workspace=workspace)
+                for item in folder:
+                    print("%s: %s" % (item['attr']['rel'], item['title']))
             else:
-                print("unknown child rel: %s" % child['attr']['rel'])
+                print("%s: %s" % (child['attr']['rel'], child['title']))
     else:
-        print("unknown library rel: %s" % library['attr']['rel'])
+        print("%s: %s" % (library['attr']['rel'], library['title']))
